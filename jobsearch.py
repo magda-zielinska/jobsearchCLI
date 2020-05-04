@@ -13,6 +13,7 @@ from selenium.webdriver import Firefox
 
 
 def _save_to_csv(links):
+    # @TODO: include option to define where to save the file
     links = [[link] for link in links]
     with open('job_listings.csv', 'w') as outcsv:
         # configure writer to write standard csv file
@@ -22,6 +23,7 @@ def _save_to_csv(links):
 
 
 def _clear_csv():
+    # @TODO: include the option to delete a previosly made file
     return os.remove('job_listings.csv')
 
 
@@ -100,8 +102,9 @@ def get_parser():
                         help='the position you are looking for')
     parser.add_argument('location', metavar='LOCATION', type=str, nargs='*',
                         help='the city in which you are looking for a job')
-    parser.add_argument('-s', '--stackoverflow', help='look for jobs on stackoverflow', action='store_true')
+    parser.add_argument('-s', '--stackoverflow', help='look for jobs on stackoverflow, default: linkedin', action='store_true')
     parser.add_argument('-l', '--linkedin', help='look for jobs on the linkedin', action='store_true')
+    # @TODO: include the feature to define the number of saved listings
     parser.add_argument('-n', '--num-answers', help='number of links to be stored', default=26, type=int)
 
     return parser
