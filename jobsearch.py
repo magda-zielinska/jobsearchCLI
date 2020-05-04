@@ -2,7 +2,6 @@ import csv
 import argparse
 import requests
 from lxml import html
-import os
 
 from requests.exceptions import ConnectionError
 from requests.exceptions import SSLError
@@ -13,7 +12,7 @@ from selenium.webdriver import Firefox
 
 
 def _save_to_csv(links):
-    # @TODO: include option to define where to save the file
+    # @TODO: include option to save to desktop
     links = [[link] for link in links]
     with open('job_listings.csv', 'w') as outcsv:
         # configure writer to write standard csv file
@@ -21,10 +20,6 @@ def _save_to_csv(links):
         for link in links:
             writer.writerow(link)
 
-
-def _clear_csv():
-    # @TODO: include the option to delete a previosly made file
-    return os.remove('job_listings.csv')
 
 
 def _search_stackoverflow(job, location):
@@ -78,6 +73,8 @@ def _find_links(args):
         _search_stackoverflow(args['job'], args['location'])
     if args['linkedin']:
         _search_linkedin(args['job'], args['location'])
+    if args['clear']:
+        _clear_csv()
     else:
         _search_linkedin(args['job'], args['location'])
 
@@ -103,7 +100,7 @@ def get_parser():
     parser.add_argument('location', metavar='LOCATION', type=str, nargs='*',
                         help='the city in which you are looking for a job')
     parser.add_argument('-s', '--stackoverflow', help='look for jobs on stackoverflow, default: linkedin', action='store_true')
-    parser.add_argument('-l', '--linkedin', help='look for jobs on the linkedin', action='store_true')
+    parser.add_argument('-l', '--linkedin', help='look for jobs on linkedin', action='store_true')
     # @TODO: include the feature to define the number of saved listings
     parser.add_argument('-n', '--num-answers', help='number of links to be stored', default=26, type=int)
 
