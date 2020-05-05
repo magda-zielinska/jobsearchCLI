@@ -1,3 +1,4 @@
+import os
 import csv
 import argparse
 import requests
@@ -12,14 +13,13 @@ from selenium.webdriver import Firefox
 
 
 def _save_to_csv(links):
-    # @TODO: include option to save to desktop
+    desktop_file = os.path.expanduser("~/Desktop/job_listings.csv")
     links = [[link] for link in links]
-    with open('job_listings.csv', 'w') as outcsv:
-        # configure writer to write standard csv file
-        writer = csv.writer(outcsv, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
+    with open(desktop_file, 'w') as outcsv:
+        writer = csv.writer(outcsv, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL,
+                            lineterminator='\n')
         for link in links:
             writer.writerow(link)
-
 
 
 def _search_stackoverflow(job, location):
@@ -38,11 +38,11 @@ def _search_stackoverflow(job, location):
         stackoverflow_links = []
         base_url = 'https://stackoverflow.com/jobs/'
         for link in links_wo_nones:
-            if link.startswith(base_url+'0') or link.startswith(base_url+'1')\
-                    or link.startswith(base_url+'2') or link.startswith(base_url+'3')\
-                    or link.startswith(base_url+'4') or link.startswith(base_url+'5')\
-                    or link.startswith(base_url+'6') or link.startswith(base_url+'7')\
-                    or link.startswith(base_url+'8') or link.startswith(base_url+'9'):
+            if link.startswith(base_url + '0') or link.startswith(base_url + '1') \
+                    or link.startswith(base_url + '2') or link.startswith(base_url + '3') \
+                    or link.startswith(base_url + '4') or link.startswith(base_url + '5') \
+                    or link.startswith(base_url + '6') or link.startswith(base_url + '7') \
+                    or link.startswith(base_url + '8') or link.startswith(base_url + '9'):
                 stackoverflow_links.append(link)
         return _save_to_csv(stackoverflow_links)
     except NoSuchElementException as e:
@@ -73,11 +73,8 @@ def _find_links(args):
         _search_stackoverflow(args['job'], args['location'])
     if args['linkedin']:
         _search_linkedin(args['job'], args['location'])
-    if args['clear']:
-        _clear_csv()
     else:
         _search_linkedin(args['job'], args['location'])
-
 
 
 def jobsearch(args):
@@ -99,7 +96,8 @@ def get_parser():
                         help='the position you are looking for')
     parser.add_argument('location', metavar='LOCATION', type=str, nargs='*',
                         help='the city in which you are looking for a job')
-    parser.add_argument('-s', '--stackoverflow', help='look for jobs on stackoverflow, default: linkedin', action='store_true')
+    parser.add_argument('-s', '--stackoverflow', help='look for jobs on stackoverflow, default: linkedin',
+                        action='store_true')
     parser.add_argument('-l', '--linkedin', help='look for jobs on linkedin', action='store_true')
     # @TODO: include the feature to define the number of saved listings
     parser.add_argument('-n', '--num-answers', help='number of links to be stored', default=26, type=int)
