@@ -1,4 +1,5 @@
 import os
+import platform
 import csv
 import argparse
 import requests
@@ -13,13 +14,20 @@ from selenium.webdriver import Firefox
 
 
 def _save_to_csv(links):
-    desktop_file = os.path.expanduser("~/Desktop/job_listings.csv")
     links = [[link] for link in links]
-    with open(desktop_file, 'w') as outcsv:
-        writer = csv.writer(outcsv, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL,
-                            lineterminator='\n')
-        for link in links:
-            writer.writerow(link)
+    desktop_file_macos_win = os.path.expanduser("~/Desktop/job_listings.csv")
+    if platform.system() == 'Darwin' or platform.system() == 'Windows':
+        with open(desktop_file_macos_win, 'w') as outcsv:
+            writer = csv.writer(outcsv, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL,
+                                lineterminator='\n')
+            for link in links:
+                writer.writerow(link)
+    else:
+        with open('job_listings.csv', 'w') as outcsv:
+            writer = csv.writer(outcsv, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL,
+                                lineterminator='\n')
+            for link in links:
+                writer.writerow(link)
 
 
 def _search_stackoverflow(job, location):
