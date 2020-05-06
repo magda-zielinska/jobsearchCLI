@@ -30,7 +30,7 @@ def _save_to_csv(links):
                 writer.writerow(link)
 
 
-def _search_stackoverflow(job, location):
+def _search_stackoverflow(job, location, number):
     job = job.replace(' ', '+')
     url_stackoverflow = 'https://stackoverflow.com/jobs?q={}&l={}&d=20&u=Km'.format(job, location)
     firefox_options = Options()
@@ -52,12 +52,12 @@ def _search_stackoverflow(job, location):
                     or link.startswith(base_url + '6') or link.startswith(base_url + '7') \
                     or link.startswith(base_url + '8') or link.startswith(base_url + '9'):
                 stackoverflow_links.append(link)
-        return _save_to_csv(stackoverflow_links)
+        return _save_to_csv(stackoverflow_links[:number])
     except NoSuchElementException as e:
         raise e
 
 
-def _search_linkedin(job, location):
+def _search_linkedin(job, location, number):
     try:
         jobsearch_session = requests.session()
         url_linkedin = 'https://www.linkedin.com/jobs/search/?geoId=106967730&keywords={}' \
@@ -68,7 +68,7 @@ def _search_linkedin(job, location):
         for link in search_contents.xpath('//a/@href'):
             if link.startswith('https://de.linkedin.com/jobs/view/'):
                 links.append(link)
-        return _save_to_csv(links)
+        return _save_to_csv(links[:number])
 
     except requests.exceptions.SSLError as e:
         print('Encountered an SSL Error. Try again later')
@@ -78,11 +78,11 @@ def _search_linkedin(job, location):
 def _find_links(args):
     args['job'] = ' '.join(args['job'])
     if args['stackoverflow']:
-        _search_stackoverflow(args['job'], args['location'])
-    if args['linkedin']:
-        _search_linkedin(args['job'], args['location'])
+        _search_stackoverflow(args['job'], args['location'], args['number'])
+    elif args['linkedin']:
+        _search_linkedin(args['job'], args['location'], args['number'])
     else:
-        _search_linkedin(args['job'], args['location'])
+        _search_linkedin(args['job'], args['location'], args['number'])
 
 
 def jobsearch(args):
@@ -100,15 +100,13 @@ def jobsearch(args):
 
 def get_parser():
     parser = argparse.ArgumentParser(description='tool to store links to job adds')
-    parser.add_argument('job', metavar='JOB', type=str, nargs='*',
-                        help='the position you are looking for')
-    parser.add_argument('location', metavar='LOCATION', type=str, nargs='*',
+    parser.add_argument('job', metavar='JOB', type=str, nargs='*', help='the position you are looking for')
+    parser.add_argument('location', metavar='LOCATION', type=str,
                         help='the city in which you are looking for a job')
+    parser.add_argument('-n', '--number', metavar='NUMBER', type=int,  help='number of links to be stored, max: 26')
     parser.add_argument('-s', '--stackoverflow', help='look for jobs on stackoverflow, default: linkedin',
                         action='store_true')
     parser.add_argument('-l', '--linkedin', help='look for jobs on linkedin', action='store_true')
-    # @TODO: include the feature to define the number of saved listings
-    parser.add_argument('-n', '--num-answers', help='number of links to be stored', default=26, type=int)
 
     return parser
 
@@ -117,7 +115,7 @@ def command_line_parser():
     parser = get_parser()
     args = vars(parser.parse_args())
 
-    if not args['job']:
+    if not args:
         parser.print_help()
         return
 
