@@ -22,7 +22,7 @@ pip install -r requirements.txt
 python jobsearch.py [JOB] [LOCATION] -option`
 
 ## Usage
-```python
+```
 usage: jobsearch.py [-h] [-n NUMBER] [-s] [-l] [JOB [JOB ...]] LOCATION
 
 tool to store links to job adds
