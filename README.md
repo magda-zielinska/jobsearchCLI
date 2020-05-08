@@ -18,17 +18,17 @@ in the projects folder.
 
 ## Run it in a virtual environment Mac or Linux:
 
-`python3 -m venv .venv`
-`. .venv/bin/activate`
-`pip install -r requirements.txt`
-`python3 jobsearch.py [JOB] [LOCATION] -options`
+`python3 -m venv .venv`<br>
+`. .venv/bin/activate`<br>
+`pip install -r requirements.txt`<br>
+`python3 jobsearch.py [JOB] [LOCATION] -options`<br>
 
 ## Run it in a virtual environment on Windows:
 
-`python -m venv .venv`
-`.venv\Scripts\activate.bat`
-`pip install -r requirements.txt`
-`python jobsearch.py [JOB] [LOCATION] -option`
+`python -m venv .venv` <br>
+`.venv\Scripts\activate.bat`<br>
+`pip install -r requirements.txt`<br>
+`python jobsearch.py [JOB] [LOCATION] -option`<br>
 
 ## Usage
 ```
