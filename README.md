@@ -1,8 +1,12 @@
 # jobsearchCLI
 a CLI for searching and saving links to job listings
 
+It will find up to 26 links to job ads and save them to a csv 'job_listings.csv'
+on your Desktop, if you are running a Mac or Windows machine. For Linux users the file 
+will be saved to the directory with the script.
+
 Looking through job listings can sometimes be demotivating to say the least.
-Why not just save a bunch of links to the job announcements, visit the ad directly and take it from there?
+Why not just save a bunch of links to the job announcements, visit a specific ad directly and take it from there?
 
 Me and my friends find it more convenient and stress reducing.
 
