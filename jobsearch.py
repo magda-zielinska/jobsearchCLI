@@ -1,3 +1,13 @@
+#!/usr/bin/env python
+
+################################################
+# jobsearchCLI - a list of up to 26 job listings
+# saved from either linkedin or stackoverflow
+# for all the techies in here
+#################################################
+
+
+
 import os
 import platform
 import csv
